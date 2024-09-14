@@ -28,6 +28,7 @@
     <script src="https://pod.josephguillaume.id.au/scripts/List.js"></script>
     <script src="https://pod.josephguillaume.id.au/scripts/Guard.js"></script>
     <script src="https://pod.josephguillaume.id.au/scripts/loadElement.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/Link.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link
@@ -40,6 +41,8 @@
     <script src="https://pod.josephguillaume.id.au/scripts/Memento.js"></script>
     <script src="https://pod.josephguillaume.id.au/scripts/WhenLoaded.js"></script>
     <script src="https://pod.josephguillaume.id.au/scripts/set.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/ReceiveResourceOS.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/Link.js"></script>
     <script
       type="module"
       src="https://pod.josephguillaume.id.au/scripts/PrettierButton.js"
@@ -54,6 +57,7 @@
       window.customElements.define("text-loader", TextLoader);
       window.customElements.define("show-if", Guard);
       window.customElements.define("my-list", List);
+      window.customElements.define("my-link", Link);
       window.customElements.define("autocomplete-input", AutocompleteInput);
       window.customElements.define("save-memento", Memento);
       window.customElements.define("open-with", OpenWith);
@@ -137,6 +141,14 @@
               >RDF resource</a
             >
           </li>
+          <li>
+            <a
+              href="https://solidos.solidcommunity.net/public/SolidOS%20team%20meetings/W3C%20meeting%20template.md"
+              onclick="return go(this)"
+            >
+              Markdown
+            </a>
+          </li>
         </ul>
 
         <h2>Registered apps</h2>
@@ -150,7 +162,13 @@
           prefix="solid: http://www.w3.org/ns/solid/terms# apps: https://jg10.solidcommunity.net/open-with/apps.ttl# rdfs: http://www.w3.org/2000/01/rdf-schema#"
         >
           <ion-list>
-            <my-list doc typeof="solid:TypeRegistration" add-new id="apps">
+            <my-list
+              doc
+              n="50"
+              typeof="solid:TypeRegistration"
+              add-new
+              id="apps"
+            >
               <template name="item">
                 <show-if typeof="solid:TypeRegistration">
                   <ion-card>
@@ -163,7 +181,7 @@
                     </ion-card-header>
                     <ion-card-content>
                       <ion-list>
-                        <my-list property="apps:apps" add-new>
+                        <my-list property="apps:apps" add-new n="50">
                           <template name="item">
                             <ion-item>
                               <ion-label>
@@ -172,10 +190,25 @@
                                   property="rdfs:label"
                                 ></my-editable-literal>
                                 <p>
+                                  uriPrefix:
                                   <my-editable-literal
                                     placeholder
                                     property="apps:uriPrefix"
-                                  ></my-editable-literal>
+                                  ></my-editable-literal
+                                  ><br />
+                                  <show-if not property="apps:uriPrefix">
+                                    resourceUriTemplate:
+                                    <my-editable-literal
+                                      placeholder
+                                      property="apps:resourceUriTemplate"
+                                    ></my-editable-literal
+                                    ><br />
+                                    app uriTemplate:
+                                    <my-editable-literal
+                                      placeholder
+                                      property="apps:uriTemplate"
+                                    ></my-editable-literal>
+                                  </show-if>
                                 </p>
                               </ion-label>
                             </ion-item>
@@ -188,84 +221,155 @@
               </template>
             </my-list>
           </ion-list>
+          <details>
+            <summary>Apps</summary>
+            <ion-list>
+              <my-list doc n="50">
+                <template name="item">
+                  <show-if rev="apps:apps">
+                    <ion-card>
+                      <ion-card-header>
+                        <my-editable-literal
+                          property="rdfs:label"
+                        ></my-editable-literal>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <ion-list>
+                          <my-list rev="apps:apps" add-new n="50">
+                            <template name="item">
+                              <ion-item>
+                                <ion-label>
+                                  <my-editable-literal
+                                    placeholder
+                                    property="solid:forClass"
+                                  ></my-editable-literal>
+                                </ion-label>
+                              </ion-item>
+                            </template>
+                          </my-list>
+                        </ion-list>
+                      </ion-card-content>
+                    </ion-card>
+                  </show-if>
+                </template>
+              </my-list>
+            </ion-list>
+          </details>
+          <details>
+            <summary>Edit apps.ttl</summary>
+            <text-loader
+              uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
+              id="loader-ttl"
+              active="tbc"
+              ext=".ttl"
+              autosave="change"
+            >
+              <ace-editor slot="editor" mode="ace/mode/turtle"> </ace-editor>
+              <span slot="buttons">
+                <save-memento
+                  uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
+                ></save-memento>
+              </span>
+            </text-loader>
+            <h3>TODO</h3>
+            <ul>
+              <li>Listen for changes to objects</li>
+            </ul>
+            <script>
+              if (false) {
+                let kb = document.querySelector("#loader-ttl").os.store.graph;
+                document
+                  .querySelector("#loader-ttl")
+                  .os.store.updater.flagAuthorizationMetadata();
+                document
+                  .querySelector("#loader-ttl")
+                  .os.store.updater.reloadAndSync(
+                    kb.sym(
+                      "https://jg10.solidcommunity.net/open-with/apps.ttl",
+                    ),
+                  );
+              }
+            </script>
+          </details>
+          <h2>Edit this page</h2>
+          <details width="100%">
+            <summary>Edit HTML</summary>
+            <text-loader
+              id="loader-html"
+              active="tbc"
+              ext=".html"
+              uri="https://jg10.solidcommunity.net/open-with/test.html"
+              autosave="change"
+            >
+              <ace-editor slot="editor" mode="ace/mode/html"> </ace-editor>
+              <span slot="buttons">
+                <prettier-button
+                  target="#loader-html ace-editor"
+                  lang="html"
+                ></prettier-button>
+
+                <save-memento
+                  uri="https://jg10.solidcommunity.net/open-with/test.html"
+                ></save-memento>
+              </span>
+            </text-loader>
+          </details>
+          <details>
+            <summary>Edit Open-With.js</summary>
+            <text-loader
+              id="loader-js"
+              active="tbc"
+              ext=".js"
+              autosave="change"
+              uri="https://jg10.solidcommunity.net/open-with/OpenWith.js"
+            >
+              <ace-editor slot="editor" mode="ace/mode/javascript">
+              </ace-editor>
+              <span slot="buttons">
+                <prettier-button
+                  target="#loader-js ace-editor"
+                  lang="js"
+                ></prettier-button>
+                <save-memento
+                  uri="https://jg10.solidcommunity.net/open-with/OpenWith.js"
+                ></save-memento>
+              </span>
+            </text-loader>
+          </details>
         </pos-resource>
         <details>
-          <summary>Edit apps.ttl</summary>
-          <text-loader
-            uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
-            id="loader-ttl"
-            active="tbc"
-            ext=".ttl"
-            autosave="change"
+          <summary>Commits</summary>
+          <pos-resource
+            uri="https://jg10.solidcommunity.net/open-with/history/commits.ttl"
           >
-            <ace-editor slot="editor" mode="ace/mode/turtle"> </ace-editor>
-            <span slot="buttons">
-              <save-memento
-                uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
-              ></save-memento>
-            </span>
-          </text-loader>
-          <h3>TODO</h3>
-          <ul>
-            <li>Listen for changes to objects</li>
-          </ul>
-          <script>
-            let kb = document.querySelector("#loader-ttl").os.store.graph;
-            document
-              .querySelector("#loader-ttl")
-              .os.store.updater.flagAuthorizationMetadata();
-            document
-              .querySelector("#loader-ttl")
-              .os.store.updater.reloadAndSync(
-                kb.sym("https://jg10.solidcommunity.net/open-with/apps.ttl"),
-              );
-          </script>
-        </details>
-        <h2>Edit this page</h2>
-        <details width="100%">
-          <summary>Edit HTML</summary>
-          <text-loader
-            id="loader-html"
-            active="tbc"
-            ext=".html"
-            uri="https://jg10.solidcommunity.net/open-with/test.html"
-            autosave="change"
-          >
-            <ace-editor slot="editor" mode="ace/mode/html"> </ace-editor>
-            <span slot="buttons">
-              <prettier-button
-                target="#loader-html ace-editor"
-                lang="html"
-              ></prettier-button>
-
-              <save-memento
-                uri="https://jg10.solidcommunity.net/open-with/test.html"
-              ></save-memento>
-            </span>
-          </text-loader>
-        </details>
-        <p></p>
-        <p></p>
-        <details>
-          <summary>Edit Open-With.js</summary>
-          <text-loader
-            id="loader-js"
-            active="tbc"
-            ext=".js"
-            autosave="change"
-            uri="https://jg10.solidcommunity.net/open-with/OpenWith.js"
-          >
-            <ace-editor slot="editor" mode="ace/mode/javascript"> </ace-editor>
-            <span slot="buttons">
-              <prettier-button
-                target="#loader-js ace-editor"
-                lang="js"
-              ></prettier-button>
-              <save-memento
-                uri="https://jg10.solidcommunity.net/open-with/OpenWith.js"
-              ></save-memento>
-            </span>
-          </text-loader>
+            <ion-list>
+              <my-list
+                doc
+                sort="http://www.w3.org/ns/prov#endedAtTime"
+                sort-order="desc"
+              >
+                <template name="item">
+                  <show-if typeof="http://www.wikidata.org/entity/Q20058545">
+                    <ion-item>
+                      <ion-label>
+                        <pos-value
+                          predicate="http://www.w3.org/2000/01/rdf-schema#label"
+                        ></pos-value>
+                        <p>
+                          <pos-value
+                            predicate="http://www.w3.org/ns/prov#endedAtTime"
+                          ></pos-value>
+                          <my-link
+                            rev="http://www.w3.org/ns/prov#wasGeneratedBy"
+                          ></my-link>
+                        </p>
+                      </ion-label>
+                    </ion-item>
+                  </show-if>
+                </template>
+              </my-list>
+            </ion-list>
+          </pos-resource>
         </details>
       </ion-content>
     </pos-app>

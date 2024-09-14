@@ -1,4 +1,5 @@
 @prefix : <#>.
+@prefix apps: <#>.
 @prefix acl: <http://www.w3.org/ns/auth/acl#>.
 @prefix ldp: <http://www.w3.org/ns/ldp#>.
 @prefix qu: <http://www.w3.org/2000/10/swap/pim/qif#>.
@@ -9,17 +10,10 @@
 @prefix wf: <http://www.w3.org/2005/01/wf/flow#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix schem: <https://schema.org/>.
+@prefix ind: </private/Programming/index.ttl#>.
 
 :1713358126788
-    a solid:TypeRegistration;
-    solid:forClass schem:Recipe;
-    :apps :UmaiViewer,:Umai.
-    
-    :Umai
-    rdfs:label "Umai";
-    :resourceUriTemplate ".*$instanceContainer/(.*)";
-    :uriTemplate "https://umai.noeldemartin.com/recipes/$1/".
-
+a solid:TypeRegistration; solid:forClass schem:Recipe; :apps :Umai, :UmaiViewer.
 :1713361030225
     a solid:TypeRegistration;
     solid:forClass schema:Person;
@@ -32,25 +26,26 @@
 a solid:TypeRegistration; solid:forClass vcard:Group; :apps :SolidOS.
 :1713364146812
 a solid:TypeRegistration; solid:forClass vcard:Individual; :apps :SolidOS.
-:1713364184146 a solid:TypeRegistration; solid:forClass vcard:WebID;
-:apps <#LinkedDataProfileEditor>, <#SolidProfileBrowser>.
+:1713364184146
+    a solid:TypeRegistration;
+    solid:forClass vcard:WebID;
+    :apps :LinkedDataProfileEditor, :SolidProfileBrowser.
+:1713660290836 a solid:TypeRegistration;
+solid:forClass <http://www.w3.org/ns/ldp#Container>;
+:apps :SolidOS, :SolidFilemanagerBourgeoa, :PodOSBrowser, :Penny, :AcmeUpload.
 
 :ACL a solid:TypeRegistration; solid:forClass acl:Authorization; :apps :Penny.
 
+:JG10NoCode
+    rdfs:label "JG10 no-code";
+    :uriPrefix "https://jg10.solidcommunity.net/no-code/test.html?uri=".
 :LinkedDataProfileEditor
     rdfs:label "Linked data profile editor";
+    :note "uses certificate login";
     :uriPrefix
     <https://linkeddata.github.io/profile-editor/#/profile/view?webid=>.
 :NodeShape
-    a solid:TypeRegistration;
-    solid:forClass sh:NodeShape;
-    :apps <#JG10NoCode>.
-    
-            <#JG10NoCode>
-                rdfs:label "JG10 no-code";
-                :uriPrefix
-                "https://jg10.solidcommunity.net/no-code/test.html?uri="
-            .
+a solid:TypeRegistration; solid:forClass sh:NodeShape; :apps :JG10NoCode.
 :Penny
 rdfs:label "Penny"; :uriPrefix "https://penny.vincenttunru.com/explore/?url=".
 :PodOSBrowser
@@ -63,30 +58,55 @@ rdfs:label "PodOS Browser"; :uriPrefix "https://browser.pod-os.org/?uri=".
     solid:forClass ldp:Resource;
     :apps
         :Penny, :PodOSBrowser, :SolidContentManager, :SolidFilemanagerBourgeoa,
-        :SolidOS.
+        :SolidOS, :AcmeSolidEditor, :WacEditor.
 :SolidContentManager
     rdfs:label "Solid Content Manager";
     :uriPrefix "https://jeff-zucker.github.io/solid-content-manager/?url=".
-:SolidProfileBrowser
-    rdfs:label "Solid Profile Browser";
-    :uriPrefix <https://profiles.veltens.org/profile?webId=>.
 :SolidFilemanagerBourgeoa
     rdfs:label "Solid File Manager";
     :uriPrefix "https://bourgeoa.github.io/solid-filemanager/?url=".
 :SolidOS
     rdfs:label "SolidOS";
     :uriPrefix "https://solidos.github.io/mashlib/dist/browse.html?uri=".
+:SolidProfileBrowser
+    rdfs:label "Solid Profile Browser";
+    :note "uses old popup auth";
+    :uriPrefix <https://profiles.veltens.org/profile?webId=>.
 :TaskOpen
     a solid:TypeRegistration;
     solid:forClass wf:Open;
+    solid:instance ind:this;
     :apps :SolidOS.
 :Tasks
     a solid:TypeRegistration;
     solid:forClass wf:Tracker;
+    solid:instance ind:this;
     :apps :SolidOS.
+    
 :Transaction
 a solid:TypeRegistration; solid:forClass qu:Transaction; :apps :SolidOS.
+:Umai
+    rdfs:label "Umai";
+    :resourceUriTemplate ".*$instanceContainer/(.*)";
+    :uriTemplate "https://umai.noeldemartin.com/recipes/$1/".
 :UmaiViewer
     rdfs:label "Umai viewer";
     :uriPrefix <https://umai.noeldemartin.com/viewer?url=>.
 :uriPrefix rdfs:label "uriPrefix to use to open resource in subject app".
+
+   :AcmeUpload rdfs:label "AcmeUpload";
+   apps:uriPrefix "http://acmeupload.patrickhochstenbach.net/?overwrite=true&resource=".
+
+:WacEditor rdfs:label "WAC Editor";
+apps:uriPrefix "https://waceditor.patrickhochstenbach.net/?resource=".
+
+:AcmeSolidEditor rdfs:label "AcmeSolidEditor";
+apps:uriPrefix "https://solideditor.patrickhochstenbach.net/?resource=".
+:WikiSolidPodOS rdfs:label "WikiSolidPodOS";
+apps:uriPrefix "https://josephguillaume.github.io/wiki-solid-podos/?uri=".
+
+<#Markdown>
+    a solid:TypeRegistration ;
+    solid:forClass <http://www.w3.org/ns/iana/media-types/text/markdown#Resource> ;
+    apps:apps :AcmeSolidEditor, :WikiSolidPodOS, :SolidOS.
+    
