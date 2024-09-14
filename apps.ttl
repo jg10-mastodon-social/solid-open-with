@@ -1,0 +1,61 @@
+@prefix : <#>.
+@prefix ldp: <http://www.w3.org/ns/ldp#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix schema: <http://schema.org/>.
+@prefix solid: <http://www.w3.org/ns/solid/terms#>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix wf: <http://www.w3.org/2005/01/wf/flow#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix schem: <https://schema.org/>.
+
+:1713358126788
+    a solid:TypeRegistration;
+    solid:forClass schem:Recipe;
+    :uriPrefix
+        "Umai cannot currently be passed an arbitrary resource",
+        <https://umai.noeldemartin.com/viewer?url=>.
+:1713361030225
+    a solid:TypeRegistration;
+    solid:forClass schema:Person;
+    :uriPrefix
+        <https://linkeddata.github.io/profile-editor/#/profile/view?webid=>,
+        <https://profiles.veltens.org/profile?webId=>.
+:1713362333047
+    a solid:TypeRegistration;
+    solid:forClass wf:Open;
+    :uriPrefix <https://solidos.github.io/mashlib/dist/browse.html?uri=>.
+:1713362406374
+    a solid:TypeRegistration;
+    solid:forClass wf:Tracker;
+    :uriPrefix <https://solidos.github.io/mashlib/dist/browse.html?uri=>.
+:1713364055271
+    a solid:TypeRegistration;
+    solid:forClass vcard:AddressBook;
+    :uriPrefix
+        <https://contacts.pod-os.org/address-book?uri=>,
+        <https://solidos.github.io/mashlib/dist/browse.html?uri=>.
+:1713364138652
+    a solid:TypeRegistration;
+    solid:forClass vcard:Group;
+    :uriPrefix <https://solidos.github.io/mashlib/dist/browse.html?uri=>.
+:1713364146812
+    a solid:TypeRegistration;
+    solid:forClass vcard:Individual;
+    :uriPrefix <https://solidos.github.io/mashlib/dist/browse.html?uri=>.
+:1713364184146 a solid:TypeRegistration; solid:forClass vcard:WebID.
+
+:NodeShape
+    a solid:TypeRegistration;
+    solid:forClass sh:NodeShape;
+    :uriPrefix "https://jg10.solidcommunity.net/no-code/test.html?uri=".
+:Resource
+    a solid:TypeRegistration;
+    solid:forClass ldp:Resource;
+    :uriPrefix
+        "https://bourgeoa.github.io/solid-filemanager/?url=",
+        "https://browser.pod-os.org/?uri=",
+        "https://jeff-zucker.github.io/solid-content-manager/?url=",
+        "https://penny.vincenttunru.com/explore/?url=",
+        "https://solidos.github.io/mashlib/dist/browse.html?uri=".
+:uriPrefix rdfs:label "uriPrefix to use to open resource in subject app".
+

@@ -1,0 +1,251 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Open with Solid apps</title>
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <script
+      type="module"
+      src="https://unpkg.com/@pod-os/elements/dist/elements/elements.esm.js"
+    ></script>
+    <link
+      href="https://unpkg.com/@pod-os/elements/dist/elements/elements.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/eruda"
+      onload="eruda.init()"
+    ></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/MyRouter.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/TextLoader.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/ace-editor.js"></script>
+
+    <script src="https://pod.josephguillaume.id.au/scripts/routeUri.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/ReceiveResource.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/ReceiveResourceOS.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/PropertyGetter.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/List.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/Guard.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/loadElement.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://pod.josephguillaume.id.au/scripts/select.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/AutocompleteInput.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/Memento.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/WhenLoaded.js"></script>
+    <script src="https://pod.josephguillaume.id.au/scripts/set.js"></script>
+    <script
+      type="module"
+      src="https://pod.josephguillaume.id.au/scripts/PrettierButton.js"
+    ></script>
+    <script src="OpenWith.js"></script>
+
+    <script>
+      defineElement(
+        "my-editable-literal",
+        "https://pod.josephguillaume.id.au/scripts/EditableLiteral.js",
+      );
+      window.customElements.define("text-loader", TextLoader);
+      window.customElements.define("show-if", Guard);
+      window.customElements.define("my-list", List);
+      window.customElements.define("autocomplete-input", AutocompleteInput);
+      window.customElements.define("save-memento", Memento);
+      window.customElements.define("open-with", OpenWith);
+      window.customElements.define("when-loaded", WhenLoaded);
+
+      routeUri(
+        (uri) => {
+          document.querySelector("#main").uri = uri;
+          document.querySelector("pos-navigation-bar").uri = uri;
+        },
+        () =>
+          "https://jg10.solidcommunity.net/no-code/user-shape2.ttl#UserShape",
+        (urlObject) => false,
+      );
+    </script>
+    <style>
+      ion-button {height:1em;}
+    </style>
+  </head>
+  <body>
+    <pos-app>
+      <ion-content class="ion-padding">
+        <h1>Open with Solid apps</h1>
+        <pos-navigation-bar></pos-navigation-bar>
+        <when-loaded
+          uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
+          update="open-with,#apps"
+        ></when-loaded>
+        <pos-resource
+          id="main"
+          uri="https://jg10.solidcommunity.net/no-code/user-shape2.ttl#UserShape"
+        >
+          Open in app: <open-with></open-with>
+        </pos-resource>
+
+        <h2>Examples</h2>
+        <ul>
+          <li>
+            <a
+              href="https://solidos.solidcommunity.net/public/Roadmap/Tasks/index.ttl#this"
+              onclick="return go(this)"
+              >Issue tracker</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://jg10.solidcommunity.net/no-code/user-shape2.ttl#UserShape"
+              onclick="return go(this)"
+              >SHACL shape</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://angelo.veltens.org/profile/card#me"
+              onclick="return go(this)"
+              >WebID</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://solidos.solidcommunity.net/Contacts/index.ttl#this"
+              onclick="return go(this)"
+              >Addressbook</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://solidos.solidcommunity.net/Contacts/Group/SolidOS_Team.ttl#this"
+              onclick="return go(this)"
+              >Group</a
+            >
+          </li>
+        </ul>
+
+        <h2>Edit this page</h2>
+        <p>
+          <pos-login></pos-login>
+        </p>
+
+        <p></p>
+        <details width="100%">
+          <summary>Edit HTML</summary>
+          <text-loader
+            id="loader-html"
+            active="tbc"
+            ext=".html"
+            uri="https://jg10.solidcommunity.net/open-with/test.html"
+            autosave="change"
+          >
+            <ace-editor slot="editor" mode="ace/mode/html"> </ace-editor>
+            <span slot="buttons">
+              <prettier-button
+                target="#loader-html ace-editor"
+                lang="html"
+              ></prettier-button>
+
+              <save-memento
+                uri="https://jg10.solidcommunity.net/open-with/test.html"
+              ></save-memento>
+            </span>
+          </text-loader>
+        </details>
+        <p></p>
+        <p></p>
+        <details>
+          <summary>Edit Open-With.js</summary>
+          <text-loader
+            id="loader-js"
+            active="tbc"
+            ext=".js"
+            autosave="change"
+            uri="https://jg10.solidcommunity.net/open-with/OpenWith.js"
+          >
+            <ace-editor slot="editor" mode="ace/mode/javascript"> </ace-editor>
+            <span slot="buttons">
+              <prettier-button
+                target="#loader-js ace-editor"
+                lang="js"
+              ></prettier-button>
+              <save-memento
+                uri="https://jg10.solidcommunity.net/open-with/OpenWith.js"
+              ></save-memento>
+            </span>
+          </text-loader>
+        </details>
+        <p></p>
+        <p></p>
+        <details>
+          <summary>Edit apps.ttl</summary>
+          <pos-resource
+            uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
+            prefix="solid: http://www.w3.org/ns/solid/terms# apps: https://jg10.solidcommunity.net/open-with/apps.ttl#"
+          >
+            <my-list doc typeof="solid:TypeRegistration" add-new id="apps">
+              <template name="item">
+                <show-if typeof="solid:TypeRegistration">
+                  <h3>
+                    <!-- FIXME placeholder rendering funny -->
+                    <my-editable-literal
+                      placeholder
+                      property="solid:forClass"
+                    ></my-editable-literal>
+                  </h3>
+                  <p>
+                    <my-list property="apps:uriPrefix" add-lit>
+                      <template name="item">
+                        <li>
+                          <my-editable-literal
+                            placeholder
+                            property="apps:uriPrefix"
+                          ></my-editable-literal>
+                        </li>
+                      </template>
+                    </my-list>
+                  </p>
+                </show-if>
+              </template>
+            </my-list>
+          </pos-resource>
+          <text-loader
+            uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
+            id="loader-ttl"
+            active="tbc"
+            ext=".ttl"
+            autosave="change"
+          >
+            <ace-editor slot="editor" mode="ace/mode/turtle"> </ace-editor>
+            <span slot="buttons">
+              <save-memento
+                uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
+              ></save-memento>
+            </span>
+          </text-loader>
+          <h3>TODO</h3>
+          <ul>
+            <li>Bugfix editable literal</li>
+            <li>Listen for changes to objects</li>
+          </ul>
+          <script>
+            let kb = document.querySelector("#loader-ttl").os.store.graph;
+            document
+              .querySelector("#loader-ttl")
+              .os.store.updater.flagAuthorizationMetadata();
+            document
+              .querySelector("#loader-ttl")
+              .os.store.updater.reloadAndSync(
+                kb.sym("https://jg10.solidcommunity.net/open-with/apps.ttl"),
+              );
+          </script>
+        </details>
+        <p></p>
+      </ion-content>
+    </pos-app>
+  </body>
+</html>
