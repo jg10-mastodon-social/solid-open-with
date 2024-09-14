@@ -86,7 +86,11 @@
           id="main"
           uri="https://jg10.solidcommunity.net/no-code/user-shape2.ttl#UserShape"
         >
-          Open in app: <open-with></open-with>
+          <div class="ion-padding-horizontal">
+            <pos-label></pos-label>
+            <pos-type-badges></pos-type-badges>
+          </div>
+          <open-with></open-with>
         </pos-resource>
 
         <h2>Examples</h2>
@@ -126,14 +130,98 @@
               >Group</a
             >
           </li>
+          <li>
+            <a
+              href="https://solidos.solidcommunity.net/public/Roadmap/Tasks/index.ttl"
+              onclick="return go(this)"
+              >RDF resource</a
+            >
+          </li>
         </ul>
 
-        <h2>Edit this page</h2>
+        <h2>Registered apps</h2>
+        <p>Login to edit</p>
         <p>
           <pos-login></pos-login>
         </p>
 
-        <p></p>
+        <pos-resource
+          uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
+          prefix="solid: http://www.w3.org/ns/solid/terms# apps: https://jg10.solidcommunity.net/open-with/apps.ttl# rdfs: http://www.w3.org/2000/01/rdf-schema#"
+        >
+          <ion-list>
+            <my-list doc typeof="solid:TypeRegistration" add-new id="apps">
+              <template name="item">
+                <show-if typeof="solid:TypeRegistration">
+                  <ion-card>
+                    <!-- FIXME placeholder rendering funny -->
+                    <ion-card-header>
+                      <my-editable-literal
+                        placeholder
+                        property="solid:forClass"
+                      ></my-editable-literal>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <ion-list>
+                        <my-list property="apps:apps" add-new>
+                          <template name="item">
+                            <ion-item>
+                              <ion-label>
+                                <my-editable-literal
+                                  placeholder
+                                  property="rdfs:label"
+                                ></my-editable-literal>
+                                <p>
+                                  <my-editable-literal
+                                    placeholder
+                                    property="apps:uriPrefix"
+                                  ></my-editable-literal>
+                                </p>
+                              </ion-label>
+                            </ion-item>
+                          </template>
+                        </my-list>
+                      </ion-list>
+                    </ion-card-content>
+                  </ion-card>
+                </show-if>
+              </template>
+            </my-list>
+          </ion-list>
+        </pos-resource>
+        <details>
+          <summary>Edit apps.ttl</summary>
+          <text-loader
+            uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
+            id="loader-ttl"
+            active="tbc"
+            ext=".ttl"
+            autosave="change"
+          >
+            <ace-editor slot="editor" mode="ace/mode/turtle"> </ace-editor>
+            <span slot="buttons">
+              <save-memento
+                uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
+              ></save-memento>
+            </span>
+          </text-loader>
+          <h3>TODO</h3>
+          <ul>
+            <li>Listen for changes to objects</li>
+          </ul>
+          <script>
+            let kb = document.querySelector("#loader-ttl").os.store.graph;
+            document
+              .querySelector("#loader-ttl")
+              .os.store.updater.flagAuthorizationMetadata();
+            document
+              .querySelector("#loader-ttl")
+              .os.store.updater.reloadAndSync(
+                kb.sym("https://jg10.solidcommunity.net/open-with/apps.ttl"),
+              );
+          </script>
+        </details>
+        <h2>Edit this page</h2>
         <details width="100%">
           <summary>Edit HTML</summary>
           <text-loader
@@ -179,72 +267,6 @@
             </span>
           </text-loader>
         </details>
-        <p></p>
-        <p></p>
-        <details>
-          <summary>Edit apps.ttl</summary>
-          <pos-resource
-            uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
-            prefix="solid: http://www.w3.org/ns/solid/terms# apps: https://jg10.solidcommunity.net/open-with/apps.ttl#"
-          >
-            <my-list doc typeof="solid:TypeRegistration" add-new id="apps">
-              <template name="item">
-                <show-if typeof="solid:TypeRegistration">
-                  <h3>
-                    <!-- FIXME placeholder rendering funny -->
-                    <my-editable-literal
-                      placeholder
-                      property="solid:forClass"
-                    ></my-editable-literal>
-                  </h3>
-                  <p>
-                    <my-list property="apps:uriPrefix" add-lit>
-                      <template name="item">
-                        <li>
-                          <my-editable-literal
-                            placeholder
-                            property="apps:uriPrefix"
-                          ></my-editable-literal>
-                        </li>
-                      </template>
-                    </my-list>
-                  </p>
-                </show-if>
-              </template>
-            </my-list>
-          </pos-resource>
-          <text-loader
-            uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
-            id="loader-ttl"
-            active="tbc"
-            ext=".ttl"
-            autosave="change"
-          >
-            <ace-editor slot="editor" mode="ace/mode/turtle"> </ace-editor>
-            <span slot="buttons">
-              <save-memento
-                uri="https://jg10.solidcommunity.net/open-with/apps.ttl"
-              ></save-memento>
-            </span>
-          </text-loader>
-          <h3>TODO</h3>
-          <ul>
-            <li>Bugfix editable literal</li>
-            <li>Listen for changes to objects</li>
-          </ul>
-          <script>
-            let kb = document.querySelector("#loader-ttl").os.store.graph;
-            document
-              .querySelector("#loader-ttl")
-              .os.store.updater.flagAuthorizationMetadata();
-            document
-              .querySelector("#loader-ttl")
-              .os.store.updater.reloadAndSync(
-                kb.sym("https://jg10.solidcommunity.net/open-with/apps.ttl"),
-              );
-          </script>
-        </details>
-        <p></p>
       </ion-content>
     </pos-app>
   </body>

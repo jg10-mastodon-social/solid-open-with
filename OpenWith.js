@@ -1,49 +1,64 @@
 class OpenWith extends ReceiveResourceOS {
   update() {
-    if (typeof this.resource == "undefined") {
-      setTimeout(() => {
-        this.update();
-      }, 10);
+    if (!this.resource || !this.os) {
       return false;
     }
     this.replaceChildren([]);
 
-    let thisTypes = this.resource.types().map((x) => x.uri);
+    let thisTypes = this.resource.types().map(x => x.uri);
     let kb = this.os.store.graph;
     let apps = thisTypes
-      .flatMap((t) =>
+      .flatMap(t =>
         kb.each(
           null,
           kb.sym("http://www.w3.org/ns/solid/terms#forClass"),
-          kb.sym(t),
-        ),
+          kb.sym(t)
+        )
       )
-      .filter((rego) => rego != null)
-      .flatMap((rego) =>
+      .filter(rego => rego != null)
+      .flatMap(rego =>
         kb
           .each(
             rego,
-            kb.sym(
-              "https://jg10.solidcommunity.net/open-with/apps.ttl#uriPrefix",
-            ),
-            null,
+            kb.sym("https://jg10.solidcommunity.net/open-with/apps.ttl#apps"),
+            null
           )
-          .map((x) => x.value),
+          .flatMap(app => ({
+            uriPrefix: kb.anyValue(
+              app,
+              kb.sym(
+                "https://jg10.solidcommunity.net/open-with/apps.ttl#uriPrefix"
+              ),
+              null
+            ),
+            label: kb.anyValue(
+              app,
+              kb.sym("http://www.w3.org/2000/01/rdf-schema#label"),
+              null
+            )
+          }))
       )
-      .filter((app) => app != null);
-    apps =
-      thisTypes.includes(this.typeof) && this.getAttribute("uriprefix")
-        ? [this.getAttribute("uriprefix"), ...apps]
-        : apps;
+      .filter(app => app != null);
     console.log(apps);
 
     if (apps.length > 0) {
-      let uri = apps[0] + encodeURIComponent(this.resource.uri);
-      let link = document.createElement("a");
-      link.href = uri;
-      link.innerHTML = "<pos-label></pos-label>";
-      this.replaceChildren(link);
-      if (this.getAttribute("auto") != null) window.open(uri, "_blank");
+      let select = document.createElement("ion-select");
+      select.label = "Open with";
+      select.placeholder = "App";
+      select.interface = "action-sheet";
+      select.classList.add("ion-padding-horizontal");
+      select.addEventListener("ionChange", e => {
+        window.open(e.detail.value, "_blank");
+      });
+
+      for (let app of apps) {
+        let uri = app.uriPrefix + encodeURIComponent(this.resource.uri);
+        let option = document.createElement("ion-select-option");
+        option.value = uri;
+        option.innerText = app.label;
+        select.append(option);
+      }
+      this.replaceChildren(select);
     }
   }
 }

@@ -1,5 +1,7 @@
 @prefix : <#>.
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
 @prefix ldp: <http://www.w3.org/ns/ldp#>.
+@prefix qu: <http://www.w3.org/2000/10/swap/pim/qif#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix schema: <http://schema.org/>.
 @prefix solid: <http://www.w3.org/ns/solid/terms#>.
@@ -11,51 +13,80 @@
 :1713358126788
     a solid:TypeRegistration;
     solid:forClass schem:Recipe;
-    :uriPrefix
-        "Umai cannot currently be passed an arbitrary resource",
-        <https://umai.noeldemartin.com/viewer?url=>.
+    :apps :UmaiViewer,:Umai.
+    
+    :Umai
+    rdfs:label "Umai";
+    :resourceUriTemplate ".*$instanceContainer/(.*)";
+    :uriTemplate "https://umai.noeldemartin.com/recipes/$1/".
+
 :1713361030225
     a solid:TypeRegistration;
     solid:forClass schema:Person;
-    :uriPrefix
-        <https://linkeddata.github.io/profile-editor/#/profile/view?webid=>,
-        <https://profiles.veltens.org/profile?webId=>.
-:1713362333047
-    a solid:TypeRegistration;
-    solid:forClass wf:Open;
-    :uriPrefix <https://solidos.github.io/mashlib/dist/browse.html?uri=>.
-:1713362406374
-    a solid:TypeRegistration;
-    solid:forClass wf:Tracker;
-    :uriPrefix <https://solidos.github.io/mashlib/dist/browse.html?uri=>.
+    :apps :LinkedDataProfileEditor, :SolidProfileBrowser.
 :1713364055271
     a solid:TypeRegistration;
     solid:forClass vcard:AddressBook;
-    :uriPrefix
-        <https://contacts.pod-os.org/address-book?uri=>,
-        <https://solidos.github.io/mashlib/dist/browse.html?uri=>.
+    :apps :PodOSContacts, :SolidOS.
 :1713364138652
-    a solid:TypeRegistration;
-    solid:forClass vcard:Group;
-    :uriPrefix <https://solidos.github.io/mashlib/dist/browse.html?uri=>.
+a solid:TypeRegistration; solid:forClass vcard:Group; :apps :SolidOS.
 :1713364146812
-    a solid:TypeRegistration;
-    solid:forClass vcard:Individual;
-    :uriPrefix <https://solidos.github.io/mashlib/dist/browse.html?uri=>.
-:1713364184146 a solid:TypeRegistration; solid:forClass vcard:WebID.
+a solid:TypeRegistration; solid:forClass vcard:Individual; :apps :SolidOS.
+:1713364184146 a solid:TypeRegistration; solid:forClass vcard:WebID;
+:apps <#LinkedDataProfileEditor>, <#SolidProfileBrowser>.
 
+:ACL a solid:TypeRegistration; solid:forClass acl:Authorization; :apps :Penny.
+
+:LinkedDataProfileEditor
+    rdfs:label "Linked data profile editor";
+    :uriPrefix
+    <https://linkeddata.github.io/profile-editor/#/profile/view?webid=>.
 :NodeShape
     a solid:TypeRegistration;
     solid:forClass sh:NodeShape;
-    :uriPrefix "https://jg10.solidcommunity.net/no-code/test.html?uri=".
+    :apps <#JG10NoCode>.
+    
+            <#JG10NoCode>
+                rdfs:label "JG10 no-code";
+                :uriPrefix
+                "https://jg10.solidcommunity.net/no-code/test.html?uri="
+            .
+:Penny
+rdfs:label "Penny"; :uriPrefix "https://penny.vincenttunru.com/explore/?url=".
+:PodOSBrowser
+rdfs:label "PodOS Browser"; :uriPrefix "https://browser.pod-os.org/?uri=".
+:PodOSContacts
+    rdfs:label "PodOS contacts";
+    :uriPrefix <https://contacts.pod-os.org/address-book?uri=>.
 :Resource
     a solid:TypeRegistration;
     solid:forClass ldp:Resource;
-    :uriPrefix
-        "https://bourgeoa.github.io/solid-filemanager/?url=",
-        "https://browser.pod-os.org/?uri=",
-        "https://jeff-zucker.github.io/solid-content-manager/?url=",
-        "https://penny.vincenttunru.com/explore/?url=",
-        "https://solidos.github.io/mashlib/dist/browse.html?uri=".
+    :apps
+        :Penny, :PodOSBrowser, :SolidContentManager, :SolidFilemanagerBourgeoa,
+        :SolidOS.
+:SolidContentManager
+    rdfs:label "Solid Content Manager";
+    :uriPrefix "https://jeff-zucker.github.io/solid-content-manager/?url=".
+:SolidProfileBrowser
+    rdfs:label "Solid Profile Browser";
+    :uriPrefix <https://profiles.veltens.org/profile?webId=>.
+:SolidFilemanagerBourgeoa
+    rdfs:label "Solid File Manager";
+    :uriPrefix "https://bourgeoa.github.io/solid-filemanager/?url=".
+:SolidOS
+    rdfs:label "SolidOS";
+    :uriPrefix "https://solidos.github.io/mashlib/dist/browse.html?uri=".
+:TaskOpen
+    a solid:TypeRegistration;
+    solid:forClass wf:Open;
+    :apps :SolidOS.
+:Tasks
+    a solid:TypeRegistration;
+    solid:forClass wf:Tracker;
+    :apps :SolidOS.
+:Transaction
+a solid:TypeRegistration; solid:forClass qu:Transaction; :apps :SolidOS.
+:UmaiViewer
+    rdfs:label "Umai viewer";
+    :uriPrefix <https://umai.noeldemartin.com/viewer?url=>.
 :uriPrefix rdfs:label "uriPrefix to use to open resource in subject app".
-
